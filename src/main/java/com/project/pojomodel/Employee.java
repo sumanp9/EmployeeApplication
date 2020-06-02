@@ -3,10 +3,11 @@ package com.project.pojomodel;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "employees")
 public class Employee {
 
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String firstName;
     private String lastName;
     private String emailId;
@@ -23,9 +24,7 @@ public class Employee {
         this.role = role;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
