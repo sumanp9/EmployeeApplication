@@ -1,5 +1,6 @@
 package com.project.Controller;
 
+import com.project.EmployeeDto;
 import com.project.pojomodel.*;
 import com.project.repository.EmployeeRepo;
 import org.slf4j.Logger;
@@ -8,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-@RestController
+//Using CrossOrigin annotation to share resource which allows restricted resources to be
+// requested from another domain outside the domain which the first resources was served.
+@RestController @CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController{
     @Autowired
     private EmployeeRepo empRepo;
@@ -24,6 +26,7 @@ public class EmployeeController{
 
     @RequestMapping("/employees")
     public List<Employee> getAllEmployees() {
+        System.out.println("Getting employees: "+ empRepo.findAll().size());
         return empRepo.findAll();
     }
 
@@ -31,5 +34,16 @@ public class EmployeeController{
     public Employee getEmployeeById(@PathVariable(value = "id") Long employeeId) {
         return empRepo.findById(employeeId).get();
     }
-    //@PostMapping("/employee/")
+    @PostMapping("/addEmployee")
+    public void addEmployee(@RequestBody EmployeeDto employeeDto) {
+        System.out.println("The name f new employee is: " + employeeDto.getFirstName());
+        if (employeeDto.id == null) {
+            Employee emp =  new Employee();
+            emp.setFirstName(employeeDto.getFirstName());
+            emp.setLastName(employeeDto.getLastName());
+            emp.setEmailId(employeeDto.getEmailId());
+            emp.setRole(employeeDto.getRole());
+            empRepo.save(emp);
+        }
+    }
 }
