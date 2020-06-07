@@ -46,4 +46,13 @@ public class EmployeeController{
             empRepo.save(emp);
         }
     }
+    @DeleteMapping("/deleteEmployee/{id}")
+    public void deleteEmployee(@PathVariable(value = "id") Long id){
+        try {
+            Employee employee = empRepo.findById(id).get();
+            empRepo.delete(employee);
+        } catch (NullPointerException ex) {
+            throw new NullPointerException("Unable to find the employee with id: "+ id);
+        }
+    }
 }
