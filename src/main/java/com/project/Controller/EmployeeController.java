@@ -44,6 +44,17 @@ public class EmployeeController{
             emp.setEmailId(employeeDto.getEmailId());
             emp.setRole(employeeDto.getRole());
             empRepo.save(emp);
+        } else{
+            try{
+                Employee existingEmp = empRepo.findById(employeeDto.getId()).get();
+                existingEmp.setFirstName(employeeDto.getFirstName());
+                existingEmp.setLastName(employeeDto.getLastName());
+                existingEmp.setEmailId(employeeDto.getEmailId());
+                existingEmp.setRole(employeeDto.getRole());
+                empRepo.save(existingEmp);
+            } catch(NullPointerException nullEx) {
+                throw new NullPointerException("Unable to find employee with id: "+ employeeDto.getId()+ " "+ nullEx.getMessage());
+            }
         }
     }
     @DeleteMapping("/deleteEmployee/{id}")
